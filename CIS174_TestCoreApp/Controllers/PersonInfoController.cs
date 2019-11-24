@@ -6,7 +6,7 @@ namespace CIS174_TestCoreApp.Controllers
 {
     public class PersonInfoController : Controller
     {
-        public PersonServices _person; // create an instance of Person class
+        private readonly PersonServices _person; // create an instance of Person class
 
         //Create a PersonInfo constructor
         public PersonInfoController(PersonServices person)

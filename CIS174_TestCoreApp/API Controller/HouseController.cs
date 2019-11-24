@@ -39,11 +39,12 @@ namespace CIS174_TestCoreApp.API_Controller
         }
 
         // GET: api/House/5
-        [HttpGet("{id}", Name = "Get")]
-        public IActionResult GetAllOneHouse (int id)
+        [HttpGet("{id}/xml")]
+     
+        public IActionResult GetOneHouse (int id)
         {
 
-            return Ok(house.Where(x => x.Id == id));
+            return Ok(house.Where(x => x.Id == id).FirstOrDefault());
         }
 
         // POST: api/House

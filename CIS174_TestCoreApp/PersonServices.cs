@@ -4,7 +4,7 @@ using CIS174_TestCoreApp.Data;
 using CIS174_TestCoreApp.ViewModel;
 
 using System.Linq;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace CIS174_TestCoreApp
 {
@@ -32,6 +32,20 @@ namespace CIS174_TestCoreApp
                     NumberOfAccomplishments = x.SetOfAccomplishments.Count().ToString()
                 })
                 .ToList();
+        }
+        //Boolean to check if person for update exist
+        public bool DoesPersonExist(int id)
+        {
+            return _dbContext.Persons
+                .Where(r => !r.IsDeleted)
+                .Any(r => r.Id == id);
+        }
+
+        public bool DoesNameMatch(string name)
+        {
+            return _dbContext.Persons
+                .Where(x => !x.IsDeleted)
+                .Any(x => x.FirstName == name && x.LastName == name);
         }
 
         //Show detail of one person

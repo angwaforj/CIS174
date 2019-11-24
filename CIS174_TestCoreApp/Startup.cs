@@ -1,7 +1,9 @@
 ﻿using CIS174_TestCoreApp.Data;
+using CIS174_TestCoreApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +28,12 @@ namespace CIS174_TestCoreApp
 
             //Register ApplicationDbContext with DI Container 
             services.AddDbContext<ApplicationDbContext>();
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -35,7 +43,9 @@ namespace CIS174_TestCoreApp
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddXmlSerializerFormatters();
+
             services.AddScoped<PersonServices>();
         }
 
@@ -54,6 +64,7 @@ namespace CIS174_TestCoreApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>
